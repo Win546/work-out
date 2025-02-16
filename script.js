@@ -96,7 +96,7 @@ function caricaAllenamenti() {
                     + esercizio.slice(1)
 
             row.innerHTML = `
-                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'esercizio', this.innerText)">${esercizioCap}</td>
+                <td class="nomeEsercizio" contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'esercizio', this.innerText)">${esercizioCap}</td>
                 <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'peso', this.innerText)">${item.peso  ? item.peso + " " : "n.d" }</td>
                 <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'serie', this.innerText)">${item.serie} </td>
                 <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'ripetizioni', this.innerText)">${item.ripetizioni}</td>

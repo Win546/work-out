@@ -30,28 +30,53 @@ td,th{
     width: 20%;
 
     text-align: left;
-    padding: 8px;
+
+  }
+
+  th{
+    text-align: center;
   }
   
   tr:nth-child(even) {background-color: #f2f2f2;}
 .tab-content.active {
     display: block;
 }
-
+.nomeEsercizio{
+    font-weight: 800;
+}
 .giorno-container {
     margin-top: 20px;
     padding: 10px;
     border: 1px solid #ddd;
     background-color: #f9f9f9;
 }
-<<<<<<< HEAD
-#peso{
-width:15%;
-=======
 
-#peso{
+#peso,#serie,#ripetizioni{
     width: 15%;
->>>>>>> f63f29f (versione js)
+}
+#esercizio{
+    width: 80%;
+}
+input, select{
+    margin: 8px 0px
+}
+.toRemove button{
+    background-color: transparent;
+}
+button{
+   margin:10px;
+    border:0px;
+    border-radius: 15px;
+    padding: 10px 30px;
+}
+
+#resetBtn{
+    margin:0px;
+    color: #fff;
+    background-color: red;
+    border:0px;
+    border-radius: 15px;
+    padding: 10px 30px;
 }
 h3 {
     text-align: left;
