@@ -44,6 +44,7 @@ td,th{
 .nomeEsercizio{
     font-weight: 800;
 }
+
 .giorno-container {
     margin-top: 20px;
     padding: 10px;
@@ -55,7 +56,7 @@ td,th{
     width: 15%;
 }
 #esercizio{
-    width: 80%;
+    width: 85%;
 }
 input, select{
     margin: 8px 0px
@@ -69,7 +70,9 @@ button{
     border-radius: 15px;
     padding: 10px 30px;
 }
-
+#salvaBtn{
+    margin-right: 0;
+}
 #resetBtn{
     margin:0px;
     color: #fff;
