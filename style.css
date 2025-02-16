@@ -44,8 +44,14 @@ td,th{
     border: 1px solid #ddd;
     background-color: #f9f9f9;
 }
+<<<<<<< HEAD
 #peso{
 width:15%;
+=======
+
+#peso{
+    width: 15%;
+>>>>>>> f63f29f (versione js)
 }
 h3 {
     text-align: left;
