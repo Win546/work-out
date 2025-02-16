@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Allenamenti</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>Piano di Allenamento</h1>
+
+    <label for="api_key">API Key OpenAI (Opzionale):</label>
+    <input type="password" id="api_key" placeholder="Inserisci API Key">
+    <button onclick="salvaAPIKey()">Salva API Key</button>
+
+    <h2>Aggiungi Allenamento</h2>
+    <input type="text" id="giorno" placeholder="Giorno (es. Lunedì)">
+    <input type="text" id="esercizio" placeholder="Nome esercizio">
+    <input type="number" id="peso" placeholder="Peso (kg)">
+    <input type="number" id="ripetizioni" placeholder="Ripetizioni">
+    <button onclick="salvaAllenamento()">Salva</button>
+
+    <h2>Allenamenti Salvati</h2>
+    <ul id="listaAllenamenti"></ul>
+
+    <h2>Genera Scheda con AI (Opzionale)</h2>
+    <button onclick="generaSchedaAI()">Genera Scheda</button>
+    <pre id="risultatoAI"></pre>
+
+    <h2>Esporta Scheda in PDF</h2>
+    <button onclick="esportaPDF()">Esporta PDF</button>
+
+    <h2>Cronometro</h2>
+    <p id="cronometro">00:00</p>
+    <button onclick="startCronometro()">Start</button>
+    <button onclick="stopCronometro()">Stop</button>
+    <button onclick="resetCronometro()">Reset</button>
+
+    <script>
+        function salvaAPIKey() {
+            let key = $('#api_key').val();
+            $.post('salva_api.php', { apiKey: key }, function(data) {
+                alert(data.message);
+            }, "json");
+        }
+
+        function salvaAllenamento() {
+            let giorno = $('#giorno').val();
+            let esercizio = $('#esercizio').val();
+            let peso = $('#peso').val();
+            let ripetizioni = $('#ripetizioni').val();
+
+            $.post('salva_scheda.php', { giorno, esercizio, peso, ripetizioni }, function() {
+                caricaAllenamenti();
+            });
+        }
+
+        function caricaAllenamenti() {
+            $.getJSON('storage.json', function(data) {
+                let lista = $("#listaAllenamenti").html("");
+                data.forEach((item, index) => {
+                    lista.append(`<li data-id="${index}">
+                        <span class="editabile" data-campo="esercizio">${item.esercizio}</span> -
+                        <span class="editabile" data-campo="peso">${item.peso} kg</span> x 
+                        <span class="editabile" data-campo="ripetizioni">${item.ripetizioni} reps</span>
+                    </li>`);
+                });
+            });
+        }
+
+        $(document).on("click", ".editabile", function() {
+            let campo = $(this).data("campo");
+            let nuovoValore = prompt(`Modifica ${campo}:`, $(this).text());
+            if (nuovoValore !== null) {
+                let id = $(this).parent().data("id");
+                $.post('modifica_esercizio.php', { id, campo, valore: nuovoValore }, function() {
+                    caricaAllenamenti();
+                });
+            }
+        });
+
+        function generaSchedaAI() {
+            $.post('genera_ai.php', function(data) {
+                $("#risultatoAI").text(data.response);
+            }, "json");
+        }
+
+        function esportaPDF() {
+            window.location.href = 'export_pdf.php';
+        }
+
+        let timer, secondi = 0;
+        function startCronometro() {
+            timer = setInterval(() => {
+                secondi++;
+                let min = Math.floor(secondi / 60);
+                let sec = secondi % 60;
+                $("#cronometro").text(`${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`);
+            }, 1000);
+        }
+
+        function stopCronometro() {
+            clearInterval(timer);
+        }
+
+        function resetCronometro() {
+            clearInterval(timer);
+            secondi = 0;
+            $("#cronometro").text("00:00");
+        }
+
+        $(document).ready(caricaAllenamenti);
+    </script>
+
+</body>
+</html>
