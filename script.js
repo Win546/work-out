@@ -19,9 +19,9 @@ function salvaAllenamento() {
     let giorno = document.getElementById('giorno').value.trim();
     let esercizio = document.getElementById('esercizio').value.trim();
     let peso = document.getElementById('peso').value.trim();
+    let serie = document.getElementById('serie').value.trim();
     let ripetizioni = document.getElementById('ripetizioni').value.trim();
-
-    if (!giorno || !esercizio || !peso || !ripetizioni) {
+    if (!giorno || !esercizio  || !ripetizioni || !serie) {
         alert("Compila tutti i campi!");
         return;
     }
@@ -32,13 +32,14 @@ function salvaAllenamento() {
         allenamenti[giorno] = [];
     }
 
-    allenamenti[giorno].push({ esercizio, peso, ripetizioni });
+    allenamenti[giorno].push({ esercizio, peso, ripetizioni, serie });
 
     localStorage.setItem("allenamenti", JSON.stringify(allenamenti));
 
     // Pulisce i campi dopo il salvataggio
     document.getElementById('esercizio').value = "";
     document.getElementById('peso').value = "";
+    document.getElementById('serie').value = "";
     document.getElementById('ripetizioni').value = "";
 
     caricaAllenamenti();
@@ -81,18 +82,25 @@ function caricaAllenamenti() {
             <tr>
                 <th>Esercizio</th>
                 <th>Peso</th>
+                 <th>Serie</th>
                 <th>Ripetizioni</th>
-                <th>Azioni</th>
+                <th class="toRemove" >Azioni</th>
             </tr>
         `;
 
         allenamenti[giorno].forEach((item, index) => {
             let row = document.createElement("tr");
+            let esercizio=item.esercizio;
+            let esercizioCap =
+            esercizio.charAt(0).toUpperCase()
+                    + esercizio.slice(1)
+
             row.innerHTML = `
-                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'esercizio', this.innerText)">${item.esercizio}</td>
-                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'peso', this.innerText)">${item.peso} kg</td>
-                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'ripetizioni', this.innerText)">${item.ripetizioni} reps</td>
-                <td><button onclick="rimuoviAllenamento('${giorno}', ${index})">❌</button></td>
+                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'esercizio', this.innerText)">${esercizioCap}</td>
+                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'peso', this.innerText)">${item.peso  ? item.peso + " " : "n.d" }</td>
+                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'serie', this.innerText)">${item.serie} </td>
+                <td contenteditable="true" onblur="modificaAllenamento('${giorno}', ${index}, 'ripetizioni', this.innerText)">${item.ripetizioni}</td>
+                <td class="toRemove" ><button onclick="rimuoviAllenamento('${giorno}', ${index})">❌</button></td>
             `;
             table.appendChild(row);
         });
@@ -124,9 +132,24 @@ function rimuoviAllenamento(giorno, index) {
 function esportaPDF()
 {
    var divToPrint=document.getElementById("listaAllenamenti");
-   newWin= window.open("");
-   newWin.document.write(divToPrint.outerHTML);
-   newWin.print();
-   newWin.close();
+   divToPrint.querySelectorAll('.toRemove').forEach(e => e.remove());
+    let printWindow = window.open('', '', 'width=800,height=600');
+            
+            printWindow.document.write('<html><head><title>Stampa Tabella</title>');
+            
+            // Copia tutti i CSS dalla pagina
+            document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+                printWindow.document.write(`<link rel="stylesheet" href="${link.href}">`);
+            });
+
+            printWindow.document.write('</head><body><h1>Scheda Allenamento</h1>');
+            printWindow.document.write(divToPrint.outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
 }
 
