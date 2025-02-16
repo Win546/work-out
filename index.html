@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Allenamenti</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <h1>Piano di Allenamento</h1>
+
+    <div class="tabs">
+        <button class="tab-button active" onclick="showTab('allenamenti')">Allenamenti</button>
+        <button class="tab-button" onclick="showTab('cronometro')">Cronometro</button>
+    </div>
+
+    <!-- Scheda degli allenamenti -->
+    <div id="allenamenti" class="tab-content active">
+        <h2>Aggiungi Allenamento</h2>
+        <select id="giorno">
+            <option value="Lunedì">Lunedì</option>
+            <option value="Martedì">Martedì</option>
+            <option value="Mercoledì">Mercoledì</option>
+            <option value="Giovedì">Giovedì</option>
+            <option value="Venerdì">Venerdì</option>
+            <option value="Sabato">Sabato</option>
+            <option value="Domenica">Domenica</option>
+        </select>
+        <input type="text" id="esercizio" placeholder="Nome esercizio">
+        <input type="number" id="peso" placeholder="Peso (kg)">
+        <input type="number" id="ripetizioni" placeholder="Ripetizioni">
+        <button id="salvaBtn">Aggiungi</button>
+        <button id="resetBtn">Resetta scheda</button>
+        <h2>Allenamenti Salvati</h2>
+        <div id="listaAllenamenti"></div>
+
+        <h2>Esporta Scheda in PDF</h2>
+        <button onclick="esportaPDF()">Esporta PDF</button>
+    
+    </div>
+
+    <!-- Scheda del cronometro -->
+    <div id="cronometro" class="tab-content">
+        <h2>Cronometro</h2>
+        <p id="cronometro-display">00:00</p>
+        <button onclick="startCronometro()">Start</button>
+        <button onclick="stopCronometro()">Stop</button>
+        <button onclick="resetCronometro()">Reset</button>
+    </div>
+    
+    <script src="script.js"></script>
+    
+</body>
+</html>
